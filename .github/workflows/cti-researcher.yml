@@ -1,0 +1,31 @@
+name: CTI Researcher
+
+on:
+  workflow_dispatch:
+    inputs:
+      actor:
+        description: "Threat actor name"
+        required: true
+        default: "APT28"
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -r agentic-cti-researcher/requirements.txt
+
+      - name: Run CTI Researcher
+        run: |
+          cd agentic-cti-researcher
+          python main.py --actor "${{ inputs.actor }}"
